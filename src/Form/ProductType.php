@@ -22,10 +22,10 @@ class ProductType extends AbstractType
             ->add('statut')
             ->add('createdAt')
             ->add('updateAt')
-            ->add('seller')
-            ->add('users')
-            ->add('category')
-            ->add('brand')
+            // ->add('seller')
+            // ->add('users')
+            // ->add('category')
+            // ->add('brand')
         ;
     }
 

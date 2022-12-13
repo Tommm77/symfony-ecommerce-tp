@@ -156,12 +156,12 @@ class Product
         return $this;
     }
 
-    public function isStatut(): ?bool
+    public function isStatut(): ?int
     {
         return $this->statut;
     }
 
-    public function setStatut(?bool $statut): self
+    public function setStatut(?int $statut): self
     {
         $this->statut = $statut;
 

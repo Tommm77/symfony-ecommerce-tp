@@ -54,9 +54,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_product_index') }}">back to list</a>
+    <a href="{{ path('app_products') }}">back to list</a>
 
-    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
+    <a href="{{ path('app_product_update', {'id': product.id}) }}">edit</a>
 
-    {{ include('product/_delete_form.html.twig') }}
+    {{ include('content/product/_delete_form.html.twig') }}
 {% endblock %}
