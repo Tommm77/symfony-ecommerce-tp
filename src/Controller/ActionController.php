@@ -17,6 +17,7 @@ class ActionController extends AbstractController
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
+        $product->setUpdateAt(new \DateTimeImmutable("now"));
 
         if ($form->isSubmitted() && $form->isValid()) {
             $productRepository->save($product, true);
@@ -47,11 +48,13 @@ class ActionController extends AbstractController
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
+        $product->setCreatedAt(new \DateTimeImmutable("now"));
+        $product->setUpdateAt(new \DateTimeImmutable("now"));
 
         if ($form->isSubmitted() && $form->isValid()) {
             $productRepository->save($product, true);
 
-            return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_products', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('content/product/new.html.twig', [

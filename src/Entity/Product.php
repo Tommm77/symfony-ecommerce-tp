@@ -18,7 +18,7 @@ class Product
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(nullable: true)]
     private ?string $excerpt = null;
 
     #[ORM\Column(length: 255)]
@@ -40,7 +40,7 @@ class Product
     private ?int $statut = 1;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $seller = null;
 
     #[ORM\Column]
