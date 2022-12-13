@@ -3,7 +3,8 @@
 {% block title %}Product index{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
+    <h1 style="display:inline">Product index </h1>
+    <a class="btn btn-success" href="{{ path('app_product_create') }}">Create new</a>
 
     <table class="table">
         <thead>
@@ -19,7 +20,8 @@
                 <th>Statut</th>
                 <th>CreatedAt</th>
                 <th>UpdateAt</th>
-                <th>actions</th>
+                <th>Show</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -29,17 +31,16 @@
                 <td>{{ product.name }}</td>
                 <td>{{ product.excerpt }}</td>
                 <td>{{ product.description }}</td>
-                <td>{{ product.image }}</td>
+                <td><image src="{{ product.image }}" width="20%" height="20%"></td>
                 <td>{{ product.quantity }}</td>
                 <td>{{ product.sold }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.statut }}</td>
                 <td>{{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ product.updateAt ? product.updateAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_product_read', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('app_product_update', {'id': product.id}) }}">edit</a>
-                </td>
+                <td><a class="btn btn-info btn-sm" href="{{ path('app_product_read', {'id': product.id}) }}">Show</a></td>
+                <td><a class="btn btn-warning btn-sm" href="{{ path('app_product_update', {'id': product.id}) }}">Edit</a></td>
+
             </tr>
         {% else %}
             <tr>
@@ -48,6 +49,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_product_create') }}">Create new</a>
 {% endblock %}
