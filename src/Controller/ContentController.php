@@ -13,10 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 class ContentController extends AbstractController
 {
     #[Route('/', name: 'app_product_home')]
-    public function index(): Response
+    public function index(ProductRepository $productRepository): Response
     {
         return $this->render('content/home.html.twig', [
             'controller_name' => 'ContentController',
+            'products' => $productRepository->findAll(),
         ]);
     }
 
@@ -24,6 +25,14 @@ class ContentController extends AbstractController
     public function showAll(ProductRepository $productRepository): Response
     {
         return $this->render('content/product/index.html.twig', [
+            'products' => $productRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/shop', name: 'app_shop', methods: ['GET'])]
+    public function showAllShop(ProductRepository $productRepository): Response
+    {
+        return $this->render('content/shop.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
     }

@@ -4,12 +4,9 @@
 
 {% block body %}
 <div class="wrapper">
-		<!-- content here -->
 		<div class="product-grid product-grid--flexbox">
 			<div class="product-grid__wrapper">
-				<!-- Product list start here -->
-
-				{% for product in products| slice(0, 3) %}
+				{% for product in products %}
 				<div class="product-grid__product-wrapper">
 					<div class="product-grid__product">
 						<div class="product-grid__img-wrapper">
@@ -19,7 +16,7 @@
 						<span class="product-grid__price">{{ product.price }}$</span>
 						<div class="product-grid__extend-wrapper">
 							<div class="product-grid__extend">
-								<p class="product-grid__description">{{ product.excerpt }}</p>
+								<p class="product-grid__description"{{ product.excerpt }}</p>
 								<span class="product-grid__btn product-grid__add-to-cart"><i class="fa fa-cart-arrow-down"></i> Add to cart</span>
 								<span class="product-grid__btn product-grid__add-to-fav"><i class="fa-solid fa-heart"></i> Fav</span>
 								<a href="{{ path('app_product_read', {'id': product.id}) }}"><span class="product-grid__btn product-grid__view"><i class="fa fa-eye"></i> View more</span></a>
