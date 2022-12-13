@@ -6,7 +6,60 @@
 
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
               {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
+              <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!-- Container wrapper -->
+  <div class="container">
+    <!-- Navbar brand -->
 
+    <!-- Toggle button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarButtonsExample"
+      aria-controls="navbarButtonsExample"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarButtonsExample">
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+                <li class="nav-item">
+          <a class="nav-link" href="/">Shop</a>
+        </li>
+      </ul>
+      <!-- Left links -->
+
+      <div class="d-flex align-items-center">
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/brand">Brand</a>
+        </li>
+                <li class="nav-item">
+          <a class="nav-link" href="/">Shop</a>
+        </li>
+      </ul>
+        <a type="button" class="btn btn-link px-3 me-2" href="/login">
+          Login
+        </a>
+        <a type="button" class="btn btn-primary me-3" href="/register">
+          Sign up
+        </a>
+      </div>
+    </div>
+    <!-- Collapsible wrapper -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
     </head>
     <body>
         {% block body %}{% endblock %}
