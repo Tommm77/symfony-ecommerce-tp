@@ -3,33 +3,25 @@
 {% block title %}Brand index{% endblock %}
 
 {% block body %}
-    <h1>Brand index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for brand in brands %}
-            <tr>
-                <td>{{ brand.id }}</td>
-                <td>{{ brand.name }}</td>
-                <td>
-                    <a href="{{ path('app_brand_show', {'id': brand.id}) }}">show</a>
-                    <a href="{{ path('app_brand_edit', {'id': brand.id}) }}">edit</a>
-                </td>
-            </tr>
+    <h1 style="display:inline">Brand & Category Modification</h1>
+    <a class="btn btn-success" href="{{ path('app_brand_new') }}">Create new Brand</a>
+    <br>
+    <div class="card-deck">
+    {% for brand in brands %}
+        <div class="card">
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ brand.id }}</h5>
+                    <p class="card-text">{{ brand.name }}</p>
+                    <a class="btn btn-danger btn-sm">{{ include('brand/_delete_form.html.twig') }}</a>
+                    <a class="btn btn-warning btn-lg" href="{{ path('app_brand_edit', {'id': brand.id}) }}">Edit  </a>
+                </div>
+            </div>
+        </div>
         {% else %}
             <tr>
                 <td colspan="3">no records found</td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_brand_new') }}">Create new</a>
+    </div>
 {% endblock %}
