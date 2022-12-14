@@ -144,6 +144,7 @@ body {
 		box-shadow: $product-box-shadow;
 		background: #fff;
 		border-radius: 0 0 4px 4px;
+		width: 108.60%;
 
 		&:before {
 			content: "";
@@ -222,6 +223,7 @@ body {
   .container{
     width:100%;
     height:100%;
+		--bs-gutter-x: -0.5rem!important;
     .top{
       height: 80%;
       width:100%;
@@ -244,7 +246,7 @@ body {
       }
       .left{
         height:100%;
-        width: 50%;
+        width: 53%;
         background: #f4f4f4;
         position:relative;
         float:left;
@@ -255,7 +257,7 @@ body {
         }
         .buy{
           float:right;
-          width: calc(30% - 2px);
+          width: calc(30% - -20px);
           height:100%;
           background: #f1f1f1;
           transition: background 0.5s;
@@ -325,4 +327,8 @@ body {
       }
     }
   }
+}
+
+.buttonback {
+	color: #E91E63;
 }
