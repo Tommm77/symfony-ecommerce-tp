@@ -52,26 +52,36 @@ class ActionController extends AbstractController
     }
 
     #[Route('/product/add/{id}', name: 'app_product_add', methods: ['GET', 'POST'])]
-    public function addProductToCart(Request $request, Product $product, CartsProductsRepository $cartProductsRepository, CartRepository $cartRepository): Response
+    public function addProductToCart(Request $request, Product $product, CartsProductsRepository $cartProductsRepository, CartRepository $cartRepository): void
     {
-        /** @var User $user **/
-        $user = $this->getUser();
-        $cart = $user->getCart();
-        $cp = $cart->getCartsProducts()->toArray();
+    /** @var User $user **/
+    $user = $this->getUser();
+    $cart = $user->getCart();
+    $cp = $cart->getCartsProducts()->toArray();
+
+    if (empty($cp)) {
+        $cProduct = new CartsProducts();
+        $cProduct->setQuantity(1);
+        $cProduct->setCart($cart);
+        $cProduct->setProduct($product);
+    } else {
         foreach ($cp as $cProduct) {
-            if ($cProduct->getProduct()->getId() == $product->getId()) {
+            if ($cProduct->getProduct()->getId() === $product->getId()) {
                 $cProduct->setQuantity($cProduct->getQuantity() + 1);
+                // break;
             } else {
                 $cProduct = new CartsProducts();
+                $cProduct->setQuantity(1);
                 $cProduct->setCart($cart);
                 $cProduct->setProduct($product);
-                $cProduct->setQuantity(1);
+                var_dump("je suis ici");
             }
-            $cartProductsRepository->save($cProduct, true);
+            var_dump("test");
         }
-        return $this->redirectToRoute('app_product_home', [], Response::HTTP_SEE_OTHER);
     }
-
+    $cartProductsRepository->save($cProduct, true);
+    //return $this->redirectToRoute('app_product_home', [], Response::HTTP_SEE_OTHER);
+}
 
     #[Route('/products/create', name: 'app_product_create', methods: ['GET', 'POST'])]
     public function createProduct(Request $request, ProductRepository $productRepository): Response

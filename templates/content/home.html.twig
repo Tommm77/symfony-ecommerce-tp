@@ -20,9 +20,9 @@
 						<div class="product-grid__extend-wrapper">
 							<div class="product-grid__extend">
 								<p class="product-grid__description">{{ product.excerpt }}</p>
-								<span class="product-grid__btn product-grid__add-to-cart"><i class="fa fa-cart-arrow-down"></i> Add to cart</span>
+								<a href="{{ path('app_product_add', {'id': product.id}) }}"><span class="product-grid__btn product-grid__add-to-cart"><i class="fa fa-cart-arrow-down"></i> Add to cart</span></a>
 								<span class="product-grid__btn product-grid__add-to-fav"><i class="fa-solid fa-heart"></i> Fav</span>
-								<a href="{{ path('app_product_read', {'id': product.id}) }}"><span class="product-grid__btn product-grid__view"><i class="fa fa-eye"></i> View more</span></a>
+								<a style="color: white;" class="addcartlogo" href="{{ path('app_product_read', {'id': product.id}) }}"><span class="product-grid__btn product-grid__view"><i class="fa fa-eye"></i> View more</span></a>
 							</div>
 						</div>
 					</div>

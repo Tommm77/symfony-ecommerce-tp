@@ -36,7 +36,17 @@
           <th>Statut</th>
         </tr>
         <tr>
-          <td>{{ product.statut }}</td>
+        {% if product.statut == 1 %}
+          <td>Disponible</td>
+        {% else %}
+          <td>Indisponible</td>
+        {% endif %}
+        </tr>
+        <tr>
+          <th>Author</th>
+        </tr>
+        <tr>
+          <td>{{ product.author }}</td>
         </tr>
       </table>
     </div>
