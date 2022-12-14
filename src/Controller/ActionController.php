@@ -10,11 +10,15 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Brand;
+use App\Entity\CartsProducts;
 use App\Form\BrandType;
 use App\Repository\BrandRepository;
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Repository\CartRepository;
+use App\Repository\CartsProductsRepository;
 use App\Repository\CategoryRepository;
+
 
 class ActionController extends AbstractController
 {
@@ -45,6 +49,27 @@ class ActionController extends AbstractController
         }
 
         return $this->redirectToRoute('app_products', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/product/add/{id}', name: 'app_product_add', methods: ['GET', 'POST'])]
+    public function addProductToCart(Request $request, Product $product, CartsProductsRepository $cartProductsRepository, CartRepository $cartRepository): Response
+    {
+        /** @var User $user **/
+        $user = $this->getUser();
+        $cart = $user->getCart();
+        $cp = $cart->getCartsProducts()->toArray();
+        foreach ($cp as $cProduct) {
+            if ($cProduct->getProduct()->getId() == $product->getId()) {
+                $cProduct->setQuantity($cProduct->getQuantity() + 1);
+            } else {
+                $cProduct = new CartsProducts();
+                $cProduct->setCart($cart);
+                $cProduct->setProduct($product);
+                $cProduct->setQuantity(1);
+            }
+            $cartProductsRepository->save($cProduct, true);
+        }
+        return $this->redirectToRoute('app_product_home', [], Response::HTTP_SEE_OTHER);
     }
 
 

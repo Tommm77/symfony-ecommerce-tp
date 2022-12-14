@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
@@ -28,6 +29,8 @@ class UserController extends AbstractController
         $user->setUpdatedAt(new \DateTimeImmutable("now"));
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $cart = new Cart();
+            $user->setCart($cart);
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
