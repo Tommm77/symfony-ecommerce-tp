@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ContentController!{% endblock %}
+
+{% block body %}
+  <section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="{{ app.user.image }}" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">{{ app.user.firstname}} {{ app.user.lastname }}</h5>
+            <p class="text-muted mb-1">Number : {{ app.user.phonenumber }}</p>
+            <p class="text-muted mb-4">Address : {{ app.user.address }} </p>
+            <div class="d-flex justify-content-center mb-2">
+              <button type="button" class="btn btn-primary">Edit Profile</button>
+              <button type="button" class="btn btn-outline-primary ms-1">Add Article</button>
+              <button type="button" class="btn btn-outline-primary ms-1">Delete Account</button>
+            </div>
+          </div>
+        </div>
+        </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Full Name</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ app.user.firstname }} {{ app.user.lastname }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ app.user.email }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Phone</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ app.user.phonenumber }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Address</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{ app.user.address }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        {% for product in products %}
+          <div class="col-md-6">
+            <div class="card mb-4 mb-md-0" style="height: 1000px;">
+              <div class="card-body">
+                <image src="{{ product.image }}" width="100%" height="20%"></image>
+                <p class="mb-1" style="font-size: .77rem; padding-top: 10px;">Name :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.name }}</p>
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Price :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.price }}$</p>
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Excerpt :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.excerpt }}</p>
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Description :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.description }}</p>
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Name :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.name }}</p>
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Quanity :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.quantity }}</p>
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Statut :</p>
+                <div class="col-sm-9">
+                {% if product.statut == 1 %}
+                  <p class="text-muted mb-0">Available</p>
+                {% else %}
+                 <p class="text-muted mb-0">Unavailable</p>
+                {% endif %}
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Sold :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.sold }}</p>
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Brand :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.brand.name }}</p>
+                </div>
+                <hr>
+                <p class="mb-1" style="font-size: .77rem;">Categories :</p>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{ product.category.name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="navigation">
+    {{ knp_pagination_render(products, "content/_paginator.html.twig") }}
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
