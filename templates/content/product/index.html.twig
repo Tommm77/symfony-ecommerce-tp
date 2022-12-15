@@ -3,7 +3,27 @@
 {% block title %}Product index{% endblock %}
 
 {% block body %}
-    <h1 style="display:inline">Product index </h1>
+<div class="card-group">
+<div class="card text-center" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Admin User Interface</h5>
+    <a href="#" class="btn btn-primary"><i class="fa fa-gear" aria-hidden="true"></i></a>
+  </div>
+</div>
+<div class="card text-center" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Admin Brand & Category Interface</h5>
+    <a href="{{ path('app_brand_index') }}" class="btn btn-primary"><i class="fa fa-gear" aria-hidden="true"></i></a>
+  </div>
+</div>
+<div class="card text-center" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Admin Product Interface</h5>
+    <a href="{{ path('app_products') }}" class="btn btn-primary"><i class="fa fa-gear" aria-hidden="true"></i></a>
+  </div>
+</div>
+</div>
+    {# <h1 style="display:inline">Product Modification</h1>
     <a class="btn btn-success" href="{{ path('app_product_create') }}">Create new</a>
 
     <table class="table">
@@ -40,7 +60,6 @@
                 <td>{{ product.updateAt ? product.updateAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td><a class="btn btn-info btn-sm" href="{{ path('app_product_read', {'id': product.id}) }}">Show</a></td>
                 <td><a class="btn btn-warning btn-sm" href="{{ path('app_product_update', {'id': product.id}) }}">Edit</a></td>
-
             </tr>
         {% else %}
             <tr>
@@ -49,4 +68,38 @@
         {% endfor %}
         </tbody>
     </table>
+     <h1 style="display:inline">Brand & Category Modification</h1>
+    <a class="btn btn-success" href="{{ path('app_brand_new') }}">Create new Brand</a>
+    <a class="btn btn-success" href="{{ path('app_brand_new') }}">Create new Category</a>
+    <br>
+    {% for brand in brands %}
+    <div class="card-row">
+        <div class="card" style"flex-direction: row">
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ brand.id }}</h5>
+                    <p class="card-text">{{ brand.name }}</p>
+                    <a class="btn btn-danger btn-sm">{{ include('brand/_delete_form.html.twig') }}</a>
+                    <a class="btn btn-warning btn-lg" href="{{ path('app_brand_edit', {'id': brand.id}) }}">Edit  </a>
+                </div>
+            </div>
+    {% endfor %}
+    {% for category in categories %}
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.id }}</h5>
+                    <p class="card-text">{{ category.name }}</p>
+                    <a class="btn btn-danger btn-sm">{{ include('category/_delete_form.html.twig') }}</a>
+                    <a class="btn btn-warning btn-lg" href="{{ path('app_category_edit', {'id': category.id}) }}">Edit  </a>
+                </div>
+            </div>
+        </div>
+    </div>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %} #}
+
+
 {% endblock %}

@@ -22,7 +22,7 @@ use App\Repository\CategoryRepository;
 
 class ActionController extends AbstractController
 {
-    #[Route('/products/{id}/update', name: 'app_product_update', methods: ['GET', 'POST'])]
+    #[Route('/admin/products/{id}/update', name: 'app_product_update', methods: ['GET', 'POST'])]
     public function updateProduct(Request $request, Product $product, ProductRepository $productRepository): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -41,7 +41,7 @@ class ActionController extends AbstractController
         ]);
     }
 
-    #[Route('/products/delete/{id}', name: 'app_product_delete', methods: ['POST'])]
+    #[Route('/admin/products/delete/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function deleteProduct(Request $request, Product $product, ProductRepository $productRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
@@ -81,7 +81,7 @@ class ActionController extends AbstractController
     return $this->redirectToRoute('app_product_home', [], Response::HTTP_SEE_OTHER);
 }
 
-    #[Route('/products/create', name: 'app_product_create', methods: ['GET', 'POST'])]
+    #[Route('/admin/products/create', name: 'app_product_create', methods: ['GET', 'POST'])]
     public function createProduct(Request $request, ProductRepository $productRepository): Response
     {
         $product = new Product();
@@ -102,16 +102,7 @@ class ActionController extends AbstractController
         ]);
     }
 
-    #[Route('/brand/', name: 'app_brand_index', methods: ['GET'])]
-    public function indexBrand(BrandRepository $brandRepository, CategoryRepository $categoryRepository): Response
-    {
-        return $this->render('brand/index.html.twig', [
-            'brands' => $brandRepository->findAll(),
-            'categories' => $categoryRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/brand/new', name: 'app_brand_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/brand/new', name: 'app_brand_new', methods: ['GET', 'POST'])]
     public function createBrand(Request $request, BrandRepository $brandRepository): Response
     {
         $brand = new Brand();
@@ -130,15 +121,7 @@ class ActionController extends AbstractController
         ]);
     }
 
-    #[Route('/brand/{id}', name: 'app_brand_show', methods: ['GET'])]
-    public function readBrand(Brand $brand): Response
-    {
-        return $this->render('brand/show.html.twig', [
-            'brand' => $brand,
-        ]);
-    }
-
-    #[Route('/brand/{id}/edit', name: 'app_brand_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/brand/{id}/edit', name: 'app_brand_edit', methods: ['GET', 'POST'])]
     public function updateBrand(Request $request, Brand $brand, BrandRepository $brandRepository): Response
     {
         $form = $this->createForm(BrandType::class, $brand);
@@ -156,7 +139,7 @@ class ActionController extends AbstractController
         ]);
     }
 
-    #[Route('/brand/{id}', name: 'app_brand_delete', methods: ['POST'])]
+    #[Route('/admin/brand/{id}', name: 'app_brand_delete', methods: ['POST'])]
     public function deleteBrand(Request $request, Brand $brand, BrandRepository $brandRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$brand->getId(), $request->request->get('_token'))) {
@@ -166,7 +149,16 @@ class ActionController extends AbstractController
         return $this->redirectToRoute('app_brand_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('category/new', name: 'app_category_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/brand-category/', name: 'app_brand_index', methods: ['GET'])]
+    public function indexBrand(BrandRepository $brandRepository, CategoryRepository $categoryRepository): Response
+    {
+        return $this->render('brand/index.html.twig', [
+            'brands' => $brandRepository->findAll(),
+            'categories' => $categoryRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/admin/category/new', name: 'app_category_new', methods: ['GET', 'POST'])]
     public function new(Request $request, CategoryRepository $categoryRepository): Response
     {
         $category = new Category();
@@ -185,15 +177,7 @@ class ActionController extends AbstractController
         ]);
     }
 
-    #[Route('category/{id}', name: 'app_category_show', methods: ['GET'])]
-    public function show(Category $category): Response
-    {
-        return $this->render('category/show.html.twig', [
-            'category' => $category,
-        ]);
-    }
-
-    #[Route('category/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/category/{id}/edit', name: 'app_category_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Category $category, CategoryRepository $categoryRepository): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
@@ -211,7 +195,7 @@ class ActionController extends AbstractController
         ]);
     }
 
-    #[Route('category/{id}', name: 'app_category_delete', methods: ['POST'])]
+    #[Route('/admin/category/{id}', name: 'app_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category, CategoryRepository $categoryRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {

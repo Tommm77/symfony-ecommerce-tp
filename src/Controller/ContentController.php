@@ -13,6 +13,9 @@ use App\Repository\CartsProductsRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\AddCartType;
+use App\Repository\BrandRepository;
+use App\Repository\CategoryRepository;
+use App\Entity\User;
 
 class ContentController extends AbstractController
 {
@@ -25,10 +28,35 @@ class ContentController extends AbstractController
         ]);
     }
 
-    #[Route('/products', name: 'app_products', methods: ['GET'])]
-    public function showAll(ProductRepository $productRepository): Response
+    #[Route('/{id}/cart', name: 'app_product_cart')]
+    public function cart(User $user)
+    {
+        $cart = $user->getCart();
+        $cp = $cart->getCartsProducts()->toArray();
+
+        $quantities = [];
+        foreach ($cp as $cartsProducts) {
+            $quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
+        }
+        return $this->render('content/cart.html.twig', [
+            'controller_name' => 'ContentController',
+            'products' => $cp,
+            'quantities' => $quantities,
+        ]);
+    }
+
+    #[Route('/admin', name: 'app_product_admin')]
+    public function admin(): Response
     {
         return $this->render('content/product/index.html.twig', [
+            'controller_name' => 'ContentController',
+        ]);
+    }
+
+    #[Route('/admin/product', name: 'app_products', methods: ['GET'])]
+    public function showAll(ProductRepository $productRepository): Response
+    {
+        return $this->render('content/product/adminproduct.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
     }

@@ -41,18 +41,30 @@
       <div class="d-flex align-items-center">
 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/brand">Brand</a>
+          <a class="nav-link" href="{{ path('app_product_cart', {'id': app.user.id}) }}">Cart</a>
         </li>
-                <li class="nav-item">
-          <a class="nav-link" href="/products">Products</a>
+      {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item">
+          <a class="nav-link" href="/admin">Admin</a>
+        </li>
+      {% endif %}
+      <li class="nav-item">
+          <a class="nav-link" href="/profile">Profile</a>
         </li>
       </ul>
-        <a type="button" class="btn btn-link px-3 me-2" href="/login">
+      {% if app.user %}
+        <a type="button" class="btn btn-link px-3 me-2" href="/logout">
+          Logout
+        </a>
+      {% else %}
+
+                <a type="button" class="btn btn-link px-3 me-2" href="/login">
           Login
         </a>
         <a type="button" class="btn btn-primary me-3" href="/register">
           Sign up
         </a>
+      {% endif %}
       </div>
     </div>
     <!-- Collapsible wrapper -->

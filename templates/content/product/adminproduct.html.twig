@@ -1,0 +1,52 @@
+ {% extends 'base.html.twig' %}
+
+{% block title %}Product index{% endblock %}
+
+{% block body %}
+ <h1 style="display:inline">Product Modification</h1>
+    <a class="btn btn-success" href="{{ path('app_product_create') }}">Create new</a>
+    <a class="btn btn-danger" href="/admin">Return Admin</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Excerpt</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Quantity</th>
+                <th>Sold</th>
+                <th>Price</th>
+                <th>Statut</th>
+                <th>CreatedAt</th>
+                <th>UpdateAt</th>
+                <th>Show</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.excerpt }}</td>
+                <td>{{ product.description }}</td>
+                <td><image src="{{ product.image }}" width="20%" height="20%"></td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.sold }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.statut }}</td>
+                <td>{{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ product.updateAt ? product.updateAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td><a class="btn btn-info btn-sm" href="{{ path('app_product_read', {'id': product.id}) }}">Show</a></td>
+                <td><a class="btn btn-warning btn-sm" href="{{ path('app_product_update', {'id': product.id}) }}">Edit</a></td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
