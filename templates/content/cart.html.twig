@@ -3,30 +3,34 @@
 {% block title %}Cart{% endblock %}
 
 {% block body %}
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title">Cart</h5>
+    <h1 class="text-center">Cart</h1>
     {% for product in products %}
-    <div class="row" style="margin-bottom: 10px;">
-      <div class="col">
-        <img src="{{ product.product.image }}" alt="image" width="100" height="100">
-      </div>
-      <div class="col">
-        <p class="card-text">{{ product.product.name }}</p>
-      </div>
-      <div class="col">
-        <p class="card-text">{{ product.quantity }}</p>
-      </div>
-            <div class="col">
-        <p class="card-text">{{ product.product.price }}</p>
-      </div>
-    {# <img src="{{ product.product.image }}" alt="image" width="100" height="100">
-    <p class="card-text">{{ product.product.name }}</p>
+    <div class="row d-flex justify-content-center">
+    <div class="card w-50">
+  <div class="card-body">
+  <img src="{{ product.product.image }}" alt="image" width="100%" height="400px">
+    <h5 class="card-title">{{ product.product.name }}</h5>
     <p class="card-text">{{ product.product.price }}</p>
-    <p class="card-text">{{ product.quantity }}</p> #}
+    <select value="{{ product.quantity }}" data-id="{{ product.id }}" class="inputquantity" min="0">
+    {% for i in 1..10 %}
+    {% if i != product.quantity %}
+    <option value="{{ i }}">{{i}}</option>
+    {% else %}
+    <option value="{{ i }}" selected="selected">{{i}}</option>
+    {% endif %}
     {% endfor %}
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    </select>
+  </div>
   </div>
 </div>
+    {% endfor %}
+    <a href="#" class="btn btn-primary">Go somewhere</a>
 
+{% endblock %}
+
+{% block javascript %}
+{{
+  parent()
+}}
+<script scr="{{ asset('./cart.js') }}"></script>
 {% endblock %}

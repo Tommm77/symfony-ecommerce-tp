@@ -4,18 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Cart;
 use App\Entity\User;
+use Stripe\StripeClient;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class UserController extends AbstractController
 {
@@ -74,5 +75,16 @@ class UserController extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    #[Route(path: '/profile/{id}/checkout', name: 'app_profile_checkout')]
+    public function cartCheckout(User $user) {
+        $currentUser = $this->getUser()->getId();
+        if ($currentUser !== $user->getId()) {
+            return $this->redirectToRoute('app_product_cart', ['id' => $currentUser]);
+        }
+        $stripe = new StripeClient($this->getParameter('stripe_sk'));
+        // dd($stripe);
+        return $this->render('security/checkout.html.twig');
     }
 }

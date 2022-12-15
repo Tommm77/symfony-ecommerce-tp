@@ -16,6 +16,7 @@ use App\Form\AddCartType;
 use App\Repository\BrandRepository;
 use App\Repository\CategoryRepository;
 use App\Entity\User;
+use App\Form\CartQuantityType;
 
 class ContentController extends AbstractController
 {
@@ -28,21 +29,44 @@ class ContentController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/cart', name: 'app_product_cart')]
-    public function cart(User $user)
+    #[Route('/{id}/cart', name: 'app_product_cart', methods: ['GET', 'POST'])]
+    public function cart(User $user, Request $request, CartsProductsRepository $cartProducts): Response
     {
         $cart = $user->getCart();
-        $cp = $cart->getCartsProducts()->toArray();
-
+        $cp = $cart->getCartsProducts();
+        $cparray = $cp->toArray();
         $quantities = [];
-        foreach ($cp as $cartsProducts) {
+        foreach ($cparray as $cartsProducts) {
             $quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
         }
+
+        // $form = $this->createForm(CartQuantityType::class, $cart);
+        // $form->handleRequest($request);
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     //$cartProducts->save($cp, true);
+        //     $this->addFlash('success', 'Quantité modifiée avec succès');
+        //     return $this->redirectToRoute('app_product_cart', [], Response::HTTP_SEE_OTHER);
+        // }
+
+
         return $this->render('content/cart.html.twig', [
             'controller_name' => 'ContentController',
             'products' => $cp,
             'quantities' => $quantities,
         ]);
+    }
+
+    #[Route('/cart/update/', name: 'app_product_cart_update', methods: ['GET', 'POST'])]
+    public function updatecart(CartsProductsRepository $cartProducts, Request $request, ProductRepository $productRepository): Response {
+        $test = $request->getContent();
+        $data = json_decode($test, true);
+        $cp = $cartProducts->find($data['id']);
+        $cp->setQuantity($data['quantity']);
+        $cartProducts->save($cp, true);
+
+
+        return $this->redirectToRoute('app_product_home');
     }
 
     #[Route('/admin', name: 'app_product_admin')]
