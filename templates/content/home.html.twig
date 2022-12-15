@@ -17,6 +17,18 @@
 						</div>
 						<span class="product-grid__title">{{ product.name }}</span>
 						<span class="product-grid__price">{{ product.price }}$</span>
+						 <div class="d-flex mt-2">
+						 	{% if product.category.name is defined %}
+										<div>
+                    <span class="badge bg-danger">{{ product.category.name }}</span>
+										</div>
+										{% endif %}
+										{% if product.brand.name is defined %}
+										<div class="mx-2">
+										<span class="badge bg-danger">{{ product.brand.name }}</span>
+										</div>
+										{% endif %}
+                </div>
 						<div class="product-grid__extend-wrapper">
 							<div class="product-grid__extend">
 								<p class="product-grid__description">{{ product.excerpt }}</p>
