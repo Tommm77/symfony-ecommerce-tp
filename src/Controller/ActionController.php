@@ -2,22 +2,23 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
+use App\Entity\Brand;
+use App\Entity\Product;
+use App\Form\BrandType;
+use App\Entity\Category;
+use App\Form\ProductType;
+use App\Form\CategoryType;
+use App\Entity\CartsProducts;
+use App\Repository\CartRepository;
+use App\Repository\BrandRepository;
+use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\CartsProductsRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\ProductRepository;
-use App\Entity\Product;
-use App\Form\ProductType;
-use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Brand;
-use App\Entity\CartsProducts;
-use App\Form\BrandType;
-use App\Repository\BrandRepository;
-use App\Entity\Category;
-use App\Form\CategoryType;
-use App\Repository\CartRepository;
-use App\Repository\CartsProductsRepository;
-use App\Repository\CategoryRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class ActionController extends AbstractController
@@ -220,6 +221,29 @@ class ActionController extends AbstractController
         }
 
         return $this->renderForm('content/product/edit.html.twig', [
+            'product' => $product,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/profile/{id}/products/create', name: 'app_product_create_profile', methods: ['GET', 'POST'])]
+    public function createProductProfile(Request $request, ProductRepository $productRepository, User $user): Response
+    {
+        $userid = $user->getId();
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+        $product->setCreatedAt(new \DateTimeImmutable("now"));
+        $product->setUpdateAt(new \DateTimeImmutable("now"));
+        $product->setSeller($user);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $productRepository->save($product, true);
+
+            return $this->redirectToRoute('app_profile', ['id' => $userid], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('content/product/new.html.twig', [
             'product' => $product,
             'form' => $form,
         ]);

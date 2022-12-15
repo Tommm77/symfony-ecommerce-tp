@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Choice;
 
 class ProductType extends AbstractType
 {
@@ -61,10 +62,12 @@ class ProductType extends AbstractType
                     'Draft' => '0',
                 ],
             ])
-            // ->add('createdAt')
-            // ->add('updateAt')
-            // ->add('seller')
-            // ->add('users')
+                //  ->add('seller', ChoiceType::class, [
+                //     'choices' => [
+                //         'Admin' => 1,]] )
+                //  ->add('users', ChoiceType::class, [
+                //     'choices' => [
+                //         'Admin' => '1',]])
             ->add('category', EntityType ::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',

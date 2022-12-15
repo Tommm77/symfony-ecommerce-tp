@@ -16,7 +16,7 @@
             <p class="text-muted mb-4">Address : {{ app.user.address }} </p>
             <div class="d-flex justify-content-center mb-2">
               <button type="button" class="btn btn-primary">Edit Profile</button>
-              <button type="button" class="btn btn-outline-primary ms-1">Add Article</button>
+              <a href="{{ path('app_product_create_profile', { 'id': app.user.id }) }}"><button type="button" class="btn btn-outline-primary ms-1">Add Article</button></a>
               <button type="button" class="btn btn-outline-primary ms-1">Delete Account</button>
             </div>
           </div>

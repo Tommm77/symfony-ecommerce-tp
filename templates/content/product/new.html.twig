@@ -6,6 +6,7 @@
     <h1>Create new Product</h1>
 
     {{ include('content/_form.html.twig') }}
-
-    <a href="{{ path('app_products') }}">back to list</a>
+    {% if app.user.roles[0] == 'ROLE_ADMIN' %}
+        <a href="{{ path('app_products') }}">back to list</a>
+    {% endif %}
 {% endblock %}
