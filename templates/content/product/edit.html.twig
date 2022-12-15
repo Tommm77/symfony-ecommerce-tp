@@ -6,8 +6,9 @@
     <h1>Edit Product</h1>
 
     {{ include('content/_form.html.twig', {'button_label': 'Update'}) }}
-
+    {% if app.user.roles == ["ROLE_ADMIN", "ROLE_USER"] %}
     <a href="{{ path('app_products') }}">back to list</a>
 
     {{ include('content/product/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

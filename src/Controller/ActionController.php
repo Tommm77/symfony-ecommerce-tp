@@ -204,4 +204,24 @@ class ActionController extends AbstractController
 
         return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/profile/{id}/update/product', name: 'app_product_update', methods: ['GET', 'POST'])]
+    public function updateProductonProfile(Request $request, Product $product, ProductRepository $productRepository): Response
+    {
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+        $product->setUpdateAt(new \DateTimeImmutable("now"));
+        $userid = $product->getSeller()->getId();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $productRepository->save($product, true);
+
+            return $this->redirectToRoute('app_profile', ['id' => $userid], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('content/product/edit.html.twig', [
+            'product' => $product,
+            'form' => $form,
+        ]);
+    }
 }
