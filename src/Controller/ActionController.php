@@ -52,7 +52,7 @@ class ActionController extends AbstractController
     }
 
     #[Route('/product/add/{id}', name: 'app_product_add', methods: ['GET', 'POST'])]
-    public function addProductToCart(Request $request, Product $product, CartsProductsRepository $cartProductsRepository, CartRepository $cartRepository): void
+    public function addProductToCart(Request $request, Product $product, CartsProductsRepository $cartProductsRepository, CartRepository $cartRepository): Response
     {
     /** @var User $user **/
     $user = $this->getUser();
@@ -68,19 +68,17 @@ class ActionController extends AbstractController
         foreach ($cp as $cProduct) {
             if ($cProduct->getProduct()->getId() === $product->getId()) {
                 $cProduct->setQuantity($cProduct->getQuantity() + 1);
-                // break;
+                break;
             } else {
                 $cProduct = new CartsProducts();
                 $cProduct->setQuantity(1);
                 $cProduct->setCart($cart);
                 $cProduct->setProduct($product);
-                var_dump("je suis ici");
             }
-            var_dump("test");
         }
     }
     $cartProductsRepository->save($cProduct, true);
-    //return $this->redirectToRoute('app_product_home', [], Response::HTTP_SEE_OTHER);
+    return $this->redirectToRoute('app_product_home', [], Response::HTTP_SEE_OTHER);
 }
 
     #[Route('/products/create', name: 'app_product_create', methods: ['GET', 'POST'])]
