@@ -97,20 +97,23 @@ class UserController extends AbstractController
         //         'stripe' => $stripe
         //     ]
         // );
+        $stripe_pk = $this->getParameter('stripe_pk');
             return $this->render('content/stripe.html.twig', [
-                'stripe_key' => "pk_test_51MFEq4GwodRabcetbbA4qk1CbsmUMSjdbtYgUR5BPvfPsTog9uljV54sKAFHvHFWFKVHcfjiuf1Dl4sB9UpAGuV500eBhBjwXI",
+                'stripe_key' => $stripe_pk,
+                'total' => $total
             ]);
     }
 
     #[Route('/profile/checkout/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
     public function createCharge(Request $request)
     {
-        Stripe\Stripe::setApiKey("pk_test_51MFEq4GwodRabcetbbA4qk1CbsmUMSjdbtYgUR5BPvfPsTog9uljV54sKAFHvHFWFKVHcfjiuf1Dl4sB9UpAGuV500eBhBjwXI");
+        $stripe_sk = $this->getParameter('stripe_sk');
+        Stripe\Stripe::setApiKey($stripe_sk);
         Stripe\Charge::create ([
-                "amount" => 5 * 100,
+                "amount" => 100,
                 "currency" => "usd",
                 "source" => $request->request->get('stripeToken'),
-                "description" => "Binaryboxtuts Payment Test"
+                "description" => "Binaryboxtuts Payment Test",
         ]);
         $this->addFlash(
             'success',
