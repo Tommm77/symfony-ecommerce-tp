@@ -97,6 +97,16 @@ class UserController extends AbstractController
         //         'stripe' => $stripe
         //     ]
         // );
+        $cart = $user->getCart();
+        $cp = $cart->getCartsProducts();
+        $cparray = $cp->toArray();
+        $quantities = [];
+        foreach ($cparray as $cartsProducts) {
+            array_push($quantities, $cartsProducts->getQuantity() * $cartsProducts->getProduct()->getPrice());
+            //$quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
+        }
+
+        $totalPrice = array_sum($quantities);
         $stripe_pk = $this->getParameter('stripe_pk');
             return $this->render('content/stripe.html.twig', [
                 'stripe_key' => $stripe_pk,
@@ -107,10 +117,21 @@ class UserController extends AbstractController
     #[Route('/profile/checkout/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
     public function createCharge(Request $request)
     {
+        $user = $this->getUser();
+        $cart = $user->getCart();
+        $cp = $cart->getCartsProducts();
+        $cparray = $cp->toArray();
+        $quantities = [];
+        foreach ($cparray as $cartsProducts) {
+            array_push($quantities, $cartsProducts->getQuantity() * $cartsProducts->getProduct()->getPrice());
+            //$quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
+        }
+
+        $totalPrice = array_sum($quantities);
         $stripe_sk = $this->getParameter('stripe_sk');
         Stripe\Stripe::setApiKey($stripe_sk);
         Stripe\Charge::create ([
-                "amount" => 100,
+                "amount" => $totalPrice * 100,
                 "currency" => "usd",
                 "source" => $request->request->get('stripeToken'),
                 "description" => "Binaryboxtuts Payment Test",
@@ -119,6 +140,6 @@ class UserController extends AbstractController
             'success',
             'Payment Successful!'
         );
-        return $this->redirectToRoute('app_profile_checkout', [], Response::HTTP_SEE_OTHER);
+        return $this->render('content/succes.html.twig');
     }
 }

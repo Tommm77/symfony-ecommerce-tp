@@ -125,11 +125,12 @@ class ContentController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/{id}', name: 'app_profile', methods: ['GET'])]
-    public function profile(ProductRepository $productRepository, User $user, PaginatorInterface $paginator, Request $request): Response
+    #[Route('/profile', name: 'app_profile', methods: ['GET'])]
+    public function profile(ProductRepository $productRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $user = $this->getUser()->getId();
         return $this->render('content/profile.html.twig', [
-            'products' => $paginator->paginate($productRepository->findBy(['seller' => $user->getId()]), $request->query->getInt('page', 1),2),
+            'products' => $paginator->paginate($productRepository->findBy(['seller' => $user]), $request->query->getInt('page', 1),2),
         ]);
     }
 }

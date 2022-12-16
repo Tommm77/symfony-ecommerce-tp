@@ -25,8 +25,9 @@ async function updateCart(e) {
         return response.json();
       }).then((data) => {
         console.log(data);
+        windows.location.reload();
       })
       .catch((error) => {
         console.error(error);
       });
-  }
+    }
