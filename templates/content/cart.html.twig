@@ -57,7 +57,7 @@
                 <h5 class="mb-0">${{ totalPrice }}</h5>
               </div>
             </div>
-            <button type="button" class="btn btn-warning btn-block btn-lg">Proceed to Pay</button>
+            <a href="{{ path('app_profile_checkout', { 'id': app.user.id, 'total': totalPrice }) }}"><button type="button" class="btn btn-warning btn-block btn-lg">Proceed to Pay</button></a>
           </div>
         </div>
 

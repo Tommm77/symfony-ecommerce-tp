@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Stripe;
 
 class UserController extends AbstractController
 {
@@ -77,14 +78,44 @@ class UserController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route(path: '/profile/{id}/checkout', name: 'app_profile_checkout')]
-    public function cartCheckout(User $user) {
-        $currentUser = $this->getUser()->getId();
-        if ($currentUser !== $user->getId()) {
-            return $this->redirectToRoute('app_product_cart', ['id' => $currentUser]);
-        }
-        $stripe = new StripeClient($this->getParameter('stripe_sk'));
-        // dd($stripe);
-        return $this->render('security/checkout.html.twig');
+    #[Route(path: '/profile/{id}/checkout={total}', name: 'app_profile_checkout')]
+    public function cartCheckout(User $user, $total) : Response {
+        // $currentUser = $this->getUser()->getId();
+        // if ($currentUser !== $user->getId()) {
+        //     return $this->redirectToRoute('app_product_cart', ['id' => $currentUser]);
+        // }
+        // // $stripe = new StripeClient($this->getParameter('stripe_sk'));
+        // $stripe = $this->getParameter('stripe_sk');
+        // // dd($stripe_key);
+
+        // // $stripe = new \Stripe\StripeClient('sk_test_51MFEq4GwodRabcetF8riN0uXwTToj6aVcgnzVVmP4Oj424ssUrWVx02x3JHbXUJZB1yri9LS5Nav55WogLvylJXJ00VMD7ZGBk');
+
+        // // dd($stripe);
+
+        // return $this->render('content/stripe.html.twig'
+        //     , [
+        //         'stripe' => $stripe
+        //     ]
+        // );
+            return $this->render('content/stripe.html.twig', [
+                'stripe_key' => "pk_test_51MFEq4GwodRabcetbbA4qk1CbsmUMSjdbtYgUR5BPvfPsTog9uljV54sKAFHvHFWFKVHcfjiuf1Dl4sB9UpAGuV500eBhBjwXI",
+            ]);
+    }
+
+    #[Route('/profile/checkout/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
+    public function createCharge(Request $request)
+    {
+        Stripe\Stripe::setApiKey("pk_test_51MFEq4GwodRabcetbbA4qk1CbsmUMSjdbtYgUR5BPvfPsTog9uljV54sKAFHvHFWFKVHcfjiuf1Dl4sB9UpAGuV500eBhBjwXI");
+        Stripe\Charge::create ([
+                "amount" => 5 * 100,
+                "currency" => "usd",
+                "source" => $request->request->get('stripeToken'),
+                "description" => "Binaryboxtuts Payment Test"
+        ]);
+        $this->addFlash(
+            'success',
+            'Payment Successful!'
+        );
+        return $this->redirectToRoute('app_profile_checkout', [], Response::HTTP_SEE_OTHER);
     }
 }
