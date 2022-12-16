@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Product;
 use App\Entity\Category;
 use App\Entity\Brand;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -12,9 +13,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
 
 class ProductType extends AbstractType
 {
+    public function __construct(protected AuthorizationCheckerInterface $authChecker)
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -62,21 +69,27 @@ class ProductType extends AbstractType
                     'Draft' => '0',
                 ],
             ])
-                //  ->add('seller', ChoiceType::class, [
-                //     'choices' => [
-                //         'Admin' => 1,]] )
                 //  ->add('users', ChoiceType::class, [
                 //     'choices' => [
                 //         'Admin' => '1',]])
-            ->add('category', EntityType ::class, [
+            ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
             ])
-            ->add('brand', EntityType ::class, [
+            ->add('brand', EntityType::class, [
                 'class' => Brand::class,
                 'choice_label' => 'name',
             ])
         ;
+        if ($this->authChecker->isGranted('ROLE_ADMIN')) {
+            $builder
+            ->add('seller', EntityType::class, [
+               'required' => false,
+               'class' => User::class,
+               'choice_label' => 'fullname',
+               ])
+            ;
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

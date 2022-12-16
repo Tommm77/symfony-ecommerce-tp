@@ -37,8 +37,11 @@ class ContentController extends AbstractController
         $cparray = $cp->toArray();
         $quantities = [];
         foreach ($cparray as $cartsProducts) {
-            $quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
+            array_push($quantities, $cartsProducts->getQuantity() * $cartsProducts->getProduct()->getPrice());
+            //$quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
         }
+
+        $totalPrice = array_sum($quantities);
 
         // $form = $this->createForm(CartQuantityType::class, $cart);
         // $form->handleRequest($request);
@@ -54,6 +57,7 @@ class ContentController extends AbstractController
             'controller_name' => 'ContentController',
             'products' => $cp,
             'quantities' => $quantities,
+            'totalPrice' => $totalPrice,
         ]);
     }
 
