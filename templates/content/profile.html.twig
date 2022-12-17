@@ -15,9 +15,9 @@
             <p class="text-muted mb-1">Number : {{ app.user.phonenumber }}</p>
             <p class="text-muted mb-4">Address : {{ app.user.address }} </p>
             <div class="d-flex justify-content-center mb-2">
-              <button type="button" class="btn btn-primary">Edit Profile</button>
+              <button type="button" class="btn btn-primary"> <a href="{{ path('app_user_crud_edit', { 'id': app.user.id }) }}" style="color: black;">Edit Profile</a></button>
               <a href="{{ path('app_product_create_profile', { 'id': app.user.id }) }}"><button type="button" class="btn btn-outline-primary ms-1">Add Article</button></a>
-              <button type="button" class="btn btn-outline-primary ms-1">Delete Account</button>
+              {{ include('user_crud/_delete_form.html.twig') }}
             </div>
           </div>
         </div>
