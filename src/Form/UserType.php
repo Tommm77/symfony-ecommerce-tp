@@ -3,9 +3,13 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Cart;
+use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserType extends AbstractType
 {
@@ -13,19 +17,32 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('roles')
-            ->add('password')
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Admin' => 'ROLE_ADMIN',
+                    'User' => 'ROLE_USER',
+                ],
+                'multiple' => true,
+                'expanded' => true,
+            ])
+            // ->add('password')
             ->add('lastname')
             ->add('firstname')
             ->add('phonenumber')
             ->add('country')
             ->add('address')
             ->add('postalcode')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('Image')
-            ->add('favorites')
-            ->add('cart')
+            // ->add('createdAt')
+            // ->add('updatedAt')
+            // ->add('Image')
+            // ->add('favorites', EntityType::class, [
+            //     'class' => Product::class,
+            //     'choice_label' => 'id',
+            // ])
+            // ->add('cart', EntityType::class, [
+            //     'class' => Cart::class,
+            //     'choice_label' => 'id',
+            // ])
         ;
     }
 
