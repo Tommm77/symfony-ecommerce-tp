@@ -25,7 +25,8 @@ class ContentController extends AbstractController
     {
         return $this->render('content/home.html.twig', [
             'controller_name' => 'ContentController',
-            'products' => $productRepository->findAll(),
+            'products' => $productRepository->findBy([], ['sold' => 'DESC'], 3),
+            'productz' => $productRepository->findBy(array('brand' => 3),array('id'=>'DESC'),3),
         ]);
     }
 
@@ -94,7 +95,7 @@ class ContentController extends AbstractController
     {
         return $this->render('content/shop.html.twig', [
             'products' => $paginator->paginate($productRepository->findAll(),
-            $request->query->getInt('page', 1),6
+            $request->query->getInt('page', 1),9
         ),
         ]);
     }

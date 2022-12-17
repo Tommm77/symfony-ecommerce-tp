@@ -3,27 +3,59 @@
 {% block title %}Hello ContentController!{% endblock %}
 
 {% block body %}
-<div class="wrapper">
+<div class="wrapper" style="background-color: #eee;">
 		<div class="product-grid product-grid--flexbox">
 			<div class="product-grid__wrapper">
 				{% for product in products %}
 				<div class="product-grid__product-wrapper">
-					<div class="product-grid__product">
-						<div class="product-grid__img-wrapper">
-							<img src="{{ product.image }}" alt="Img" class="product-grid__img" />
-						</div>
-						<span class="product-grid__title">{{ product.name }}</span>
-						<span class="product-grid__price">{{ product.price }}$</span>
-						<div class="product-grid__extend-wrapper">
-							<div class="product-grid__extend">
-								<p class="product-grid__description"{{ product.excerpt }}</p>
-								<span class="product-grid__btn product-grid__add-to-cart"><a href="{{ path('app_product_add', {'id': product.id}) }}"><i class="fa fa-cart-arrow-down"></i></a> Add to cart</span>
-								<span class="product-grid__btn product-grid__add-to-fav"><i class="fa-solid fa-heart"></i> Fav</span>
-								<a href="{{ path('app_product_read', {'id': product.id}) }}"><span class="product-grid__btn product-grid__view"><i class="fa fa-eye"></i> View more</span></a>
+						<div class="product-grid__product">
+							<div class="product-grid__img-wrapper">
+								<img src="{{ product.image }}" alt="Img" class="product-grid__img"/>
+							</div>
+							<span class="product-grid__title">{{ product.name }}</span>
+							<span class="product-grid__price">{{ product.price }}$</span>
+							<div class="d-flex mt-2">
+								{% if product.category.name is defined %}
+									<div>
+										<span class="badge bg-danger">{{ product.category.name }}</span>
+									</div>
+								{% endif %}
+								{% if product.brand.name is defined %}
+									<div class="mx-2">
+										<span class="badge bg-danger">{{ product.brand.name }}</span>
+									</div>
+								{% endif %}
+							{% if product.statut == 1 %}
+								<div>
+									<span class="badge bg-dark"><i class="fa-solid fa-circle-xmark" style="color: white;"></i> Unavailable</span>
+								</div>
+							{% endif %}
+							{% if product.statut == 2 %}
+								<div class="mx-2">
+									<span class="badge bg-success"><i class="fa-solid fa-circle-check" style="color: white;"></i> Available</span>
+								</div>
+							{% endif %}
+							</div>
+							<div class="product-grid__extend-wrapper">
+								<div class="product-grid__extend">
+									<p class="product-grid__description">{{ product.excerpt }}</p>
+									<a href="{{ path('app_product_add', {'id': product.id}) }}">
+										<span class="product-grid__btn product-grid__add-to-cart">
+											<i class="fa fa-cart-arrow-down"></i>
+											Add to cart</span>
+									</a>
+									<span class="product-grid__btn product-grid__add-to-fav">
+										<i class="fa-solid fa-heart"></i>
+										Fav</span>
+									<a style="color: white;" class="addcartlogo" href="{{ path('app_product_read', {'id': product.id}) }}">
+										<span class="product-grid__btn product-grid__view">
+											<i class="fa fa-eye"></i>
+											View more</span>
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 				{% endfor %}
 			</div>
 		</div>
