@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use Stripe;
 use App\Entity\Cart;
 use App\Entity\User;
 use Stripe\StripeClient;
 use App\Form\RegistrationFormType;
+use App\Repository\CartRepository;
 use App\Security\UserAuthenticator;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\CartsProductsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Stripe;
 
 class UserController extends AbstractController
 {
@@ -105,7 +108,6 @@ class UserController extends AbstractController
             array_push($quantities, $cartsProducts->getQuantity() * $cartsProducts->getProduct()->getPrice());
             //$quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
         }
-
         $totalPrice = array_sum($quantities);
         $stripe_pk = $this->getParameter('stripe_pk');
             return $this->render('content/stripe.html.twig', [
@@ -115,7 +117,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/profile/checkout/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
-    public function createCharge(Request $request)
+    public function createCharge(Request $request, ProductRepository $productRepository, CartsProductsRepository $cartsProductsRepository)
     {
         $user = $this->getUser();
         $cart = $user->getCart();
@@ -126,7 +128,16 @@ class UserController extends AbstractController
             array_push($quantities, $cartsProducts->getQuantity() * $cartsProducts->getProduct()->getPrice());
             //$quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
         }
-
+        foreach ($cparray as $cartsProducts) {
+            $cartQuantity = $cartsProducts->getQuantity();
+            $productQuantity = $cartsProducts->getProduct()->getQuantity();
+            $productQuantity = $productQuantity - $cartQuantity;
+            $cartnewquantity = $cartsProducts->getProduct()->setQuantity($productQuantity);
+            $productRepository->save($cartnewquantity, true);
+            $cartsProductsRepository->remove($cartsProducts, true);
+            $soldproduct = $cartsProducts->getProduct()->setSold($cartQuantity);
+            $productRepository->save($soldproduct, true);
+        }
         $totalPrice = array_sum($quantities);
         $stripe_sk = $this->getParameter('stripe_sk');
         Stripe\Stripe::setApiKey($stripe_sk);

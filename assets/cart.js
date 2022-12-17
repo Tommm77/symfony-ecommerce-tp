@@ -18,6 +18,7 @@ async function updateCart(e) {
         quantity: quantity,
         id: id
       }
+      location.reload();
       fetch(url, {
         method: 'POST',
         body : JSON.stringify(data),
@@ -25,7 +26,6 @@ async function updateCart(e) {
         return response.json();
       }).then((data) => {
         console.log(data);
-        windows.location.reload();
       })
       .catch((error) => {
         console.error(error);
