@@ -24,6 +24,7 @@
         "symfony/flex": "^2",
         "symfony/form": "6.1.*",
         "symfony/framework-bundle": "6.1.*",
+        "symfony/google-mailer": "6.1.*",
         "symfony/http-client": "6.1.*",
         "symfony/intl": "6.1.*",
         "symfony/mailer": "6.1.*",
@@ -43,6 +44,7 @@
         "symfony/web-link": "6.1.*",
         "symfony/webpack-encore-bundle": "^1.16",
         "symfony/yaml": "6.1.*",
+        "symfonycasts/reset-password-bundle": "^1.16",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
