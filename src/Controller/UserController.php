@@ -83,30 +83,13 @@ class UserController extends AbstractController
 
     #[Route(path: '/profile/{id}/checkout={total}', name: 'app_profile_checkout')]
     public function cartCheckout(User $user, $total) : Response {
-        // $currentUser = $this->getUser()->getId();
-        // if ($currentUser !== $user->getId()) {
-        //     return $this->redirectToRoute('app_product_cart', ['id' => $currentUser]);
-        // }
-        // // $stripe = new StripeClient($this->getParameter('stripe_sk'));
-        // $stripe = $this->getParameter('stripe_sk');
-        // // dd($stripe_key);
 
-        // // $stripe = new \Stripe\StripeClient('sk_test_51MFEq4GwodRabcetF8riN0uXwTToj6aVcgnzVVmP4Oj424ssUrWVx02x3JHbXUJZB1yri9LS5Nav55WogLvylJXJ00VMD7ZGBk');
-
-        // // dd($stripe);
-
-        // return $this->render('content/stripe.html.twig'
-        //     , [
-        //         'stripe' => $stripe
-        //     ]
-        // );
         $cart = $user->getCart();
         $cp = $cart->getCartsProducts();
         $cparray = $cp->toArray();
         $quantities = [];
         foreach ($cparray as $cartsProducts) {
             array_push($quantities, $cartsProducts->getQuantity() * $cartsProducts->getProduct()->getPrice());
-            //$quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
         }
         $totalPrice = array_sum($quantities);
         $stripe_pk = $this->getParameter('stripe_pk');
@@ -126,7 +109,6 @@ class UserController extends AbstractController
         $quantities = [];
         foreach ($cparray as $cartsProducts) {
             array_push($quantities, $cartsProducts->getQuantity() * $cartsProducts->getProduct()->getPrice());
-            //$quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
         }
         foreach ($cparray as $cartsProducts) {
             $cartQuantity = $cartsProducts->getQuantity();

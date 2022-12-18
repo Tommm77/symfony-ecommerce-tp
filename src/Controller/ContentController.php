@@ -39,21 +39,9 @@ class ContentController extends AbstractController
         $quantities = [];
         foreach ($cparray as $cartsProducts) {
             array_push($quantities, $cartsProducts->getQuantity() * $cartsProducts->getProduct()->getPrice());
-            //$quantities[$cartsProducts->getProduct()->getId()] = $cartsProducts->getQuantity();
         }
 
         $totalPrice = array_sum($quantities);
-
-        // $form = $this->createForm(CartQuantityType::class, $cart);
-        // $form->handleRequest($request);
-
-        // if ($form->isSubmitted() && $form->isValid()) {
-        //     //$cartProducts->save($cp, true);
-        //     $this->addFlash('success', 'Quantité modifiée avec succès');
-        //     return $this->redirectToRoute('app_product_cart', [], Response::HTTP_SEE_OTHER);
-        // }
-
-
         return $this->render('content/cart.html.twig', [
             'controller_name' => 'ContentController',
             'products' => $cp,
