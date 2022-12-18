@@ -105,6 +105,9 @@ class ContentController extends AbstractController
     {
         /** @var User $user **/
         $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
         $cart = $user->getCart();
         $cartProduct = new CartsProducts();
         $form = $this->createForm(AddCartType::class, $cartProduct);

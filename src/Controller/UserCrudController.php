@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\CartRepository;
+use App\Repository\ResetPasswordRequestRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,12 +69,35 @@ class UserCrudController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_crud_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    public function delete(Request $request, User $user, UserRepository $userRepository, CartRepository $cartRepository, ResetPasswordRequestRepository $rp): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $userRepository->remove($user, true);
+        $userid = $user->getId();
+        $productCreateByUser = $userRepository->find($userid)->getProducts();
+        $usercart = $user->getCart();
+        if ($usercart != null) {
+            $productcartuser = $usercart->getCartsProducts();
         }
-
+        $requestuser = $rp->findBy(['user' => $user]);
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+if ($usercart != null) {
+    foreach ($productcartuser as $productcart) {
+        $productcart->setCart(null);
+    }
+}
+            foreach ($requestuser as $request) {
+                $rp->remove($request, true);
+            }
+            foreach ($productCreateByUser as $product) {
+                $product->setSeller(null);
+            }
+            $userRepository->remove($user, true);
+            if ($usercart != null) {
+                $cartRepository->remove($usercart, true);
+            }
+        }
+        if ( $user == $this->getUser()) {
+            return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
+        }
         return $this->redirectToRoute('app_user_crud_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -208,9 +208,34 @@ class ActionController extends AbstractController
         return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/admin/{id}/update/product', name: 'app_product_admin_update', methods: ['GET', 'POST'])]
+    public function updateProductonAdmin(Request $request, Product $product, ProductRepository $productRepository): Response
+    {
+    $form = $this->createForm(ProductType::class, $product);
+    $form->handleRequest($request);
+    $product->setUpdateAt(new \DateTimeImmutable("now"));
+    $userid = $product->getSeller()->getId();
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $productRepository->save($product, true);
+
+        return $this->redirectToRoute('app_product_index',[],  Response::HTTP_SEE_OTHER);
+    }
+
+    return $this->renderForm('content/product/edit.html.twig', [
+        'product' => $product,
+        'form' => $form,
+    ]);
+}
+
     #[Route('/profile/{id}/update/product', name: 'app_product_update', methods: ['GET', 'POST'])]
     public function updateProductonProfile(Request $request, Product $product, ProductRepository $productRepository): Response
     {
+        $userproudctid = $product->getSeller()->getId();
+        $userid = $this->getUser()->getId();
+        if ($userproudctid != $userid) {
+            return $this->redirectToRoute('app_product_home', [], Response::HTTP_SEE_OTHER);
+        }
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
         $product->setUpdateAt(new \DateTimeImmutable("now"));
@@ -231,7 +256,10 @@ class ActionController extends AbstractController
     #[Route('/profile/{id}/products/create', name: 'app_product_create_profile', methods: ['GET', 'POST'])]
     public function createProductProfile(Request $request, ProductRepository $productRepository, User $user): Response
     {
-        $userid = $user->getId();
+        $userid = $this->getUser()->getId();
+        if ($userid !== $user->getId()) {
+            return $this->redirectToRoute('app_profile', ['id' => $userid]);
+        }
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
