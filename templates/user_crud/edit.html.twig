@@ -7,7 +7,11 @@
 
     {{ include('user_crud/_form.html.twig', {'button_label': 'Update'}) }}
 
+    {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('app_user_crud_index') }}">back to list</a>
+    {% else %}
+    <a href="{{ path('app_profile', {'id': user.id}) }}">back to profile</a>
+    {% endif %}
 
     {{ include('user_crud/_delete_form.html.twig') }}
 {% endblock %}

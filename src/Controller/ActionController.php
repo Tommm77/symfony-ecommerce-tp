@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Brand;
+use App\Form\UserType;
 use App\Entity\Product;
 use App\Form\BrandType;
 use App\Entity\Category;
@@ -11,6 +12,7 @@ use App\Form\ProductType;
 use App\Form\CategoryType;
 use App\Entity\CartsProducts;
 use App\Repository\CartRepository;
+use App\Repository\UserRepository;
 use App\Repository\BrandRepository;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
@@ -245,6 +247,28 @@ class ActionController extends AbstractController
 
         return $this->renderForm('content/product/new.html.twig', [
             'product' => $product,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'app_user_profile_edit', methods: ['GET', 'POST'])]
+    public function editprofile(Request $request, User $user, UserRepository $userRepository): Response
+    {
+        $userid = $this->getUser()->getId();
+        if ($userid !== $user->getId()) {
+                return $this->redirectToRoute('app_profile', ['id' => $userid]);
+            }
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userRepository->save($user, true);
+
+            return $this->redirectToRoute('app_profile', ['id' => $userid], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('user_crud/edit.html.twig', [
+            'user' => $user,
             'form' => $form,
         ]);
     }
