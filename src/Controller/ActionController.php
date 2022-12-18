@@ -20,6 +20,7 @@ use App\Repository\CartsProductsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ResetPasswordRequestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -299,5 +300,38 @@ class ActionController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{id}/delete', name: 'app_user_delete', methods: ['POST'])]
+    public function deleteUser(Request $request, User $user, UserRepository $userRepository, CartRepository $cartRepository, ResetPasswordRequestRepository $rp): Response
+    {
+        $userid = $user->getId();
+        $productCreateByUser = $userRepository->find($userid)->getProducts();
+        $usercart = $user->getCart();
+        if ($usercart != null) {
+            $productcartuser = $usercart->getCartsProducts();
+        }
+        $requestuser = $rp->findBy(['user' => $user]);
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+if ($usercart != null) {
+    foreach ($productcartuser as $productcart) {
+        $productcart->setCart(null);
+    }
+}
+            foreach ($requestuser as $request) {
+                $rp->remove($request, true);
+            }
+            foreach ($productCreateByUser as $product) {
+                $product->setSeller(null);
+            }
+            $userRepository->remove($user, true);
+            if ($usercart != null) {
+                $cartRepository->remove($usercart, true);
+            }
+        }
+        if ( $user == $this->getUser()) {
+            return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->redirectToRoute('app_product_home', [], Response::HTTP_SEE_OTHER);
     }
 }
